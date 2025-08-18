@@ -1,0 +1,285 @@
+---
+/**
+ * 100% Astro Component (no React).
+ * Keeps your Tailwind classes (bg-gradient-neutral, text-gradient, card-ocean, etc.).
+ */
+---
+
+<section id="Contact" class="px-10 py-10 bg-gradient-neutral scroll-mt-20">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 fade-in-up">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6 text-gradient">
+        Contact Us
+      </h2>
+      <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
+        We are here to make your dream trip a reality. Get in touch with us and
+        let’s start planning your Caribbean adventure.
+      </p>
+    </div>
+
+    <div class="grid lg:grid-cols-2 gap-12 items-start">
+      <!-- Contact Form -->
+      <div class="card-ocean p-8 fade-in-up h-fit rounded-2xl shadow">
+        <h3 class="text-2xl font-bold mb-6 text-foreground">
+          Send Us a Message
+        </h3>
+
+        <form
+          id="contact-form"
+          class="space-y-6"
+          method="POST"
+          action="https://formspree.io/f/mvgqzqlq"
+        >
+          <div>
+            <input
+              name="name"
+              placeholder="Your full name"
+              class="h-12 w-full rounded-md border border-border bg-background px-4 outline-none focus:ring-2"
+              required
+            />
+          </div>
+
+          <div>
+            <input
+              name="email"
+              type="email"
+              placeholder="your@email.com"
+              class="h-12 w-full rounded-md border border-border bg-background px-4 outline-none focus:ring-2"
+              required
+            />
+          </div>
+
+          <div>
+            <input
+              name="phone"
+              type="tel"
+              placeholder="Your phone number"
+              class="h-12 w-full rounded-md border border-border bg-background px-4 outline-none focus:ring-2"
+            />
+          </div>
+
+          <div>
+            <textarea
+              name="message"
+              placeholder="Tell us about your ideal trip..."
+              class="min-h-[120px] w-full rounded-md border border-border bg-background p-4 outline-none focus:ring-2"
+              required></textarea>
+          </div>
+
+          <div id="toast" class="hidden"></div>
+
+          <button
+            class="cursor-pointer px-8 py-3 rounded-full font-semibold text-lg text-white bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600 shadow-lg shadow-sky-500/30 hover:shadow-sky-500/50 hover:scale-105 transition-transform duration-300"
+            type="submit"
+          >
+            Send Message
+          </button>
+        </form>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="fade-in-up h-fit">
+        <div class="space-y-8">
+          <div class="card-ocean p-6 rounded-2xl shadow">
+            <div class="flex items-center space-x-4">
+              <div
+                class="w-12 h-12 flex-shrink-0 bg-gradient-ocean rounded-full flex items-center justify-center"
+              >
+                <!-- MapPin -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin"
+                >
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                  <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+                  <path
+                    d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z"
+                  ></path>
+                </svg>
+              </div>
+              <div>
+                <h4 class="font-semibold text-foreground">Location</h4>
+                <p class="text-muted-foreground">
+                  Santo Domingo, Dominican Republic
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-ocean p-6 rounded-2xl shadow">
+            <div class="flex items-center space-x-4">
+              <div
+                class="w-12 h-12 bg-gradient-ocean rounded-full flex items-center justify-center"
+              >
+                <!-- Phone -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-phone"
+                  ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                  ></path><path
+                    d="M5 4h4l2 5l-2.5 1.5a11 11 0 0 0 5 5l1.5 -2.5l5 2v4a2 2 0 0 1 -2 2a16 16 0 0 1 -15 -15a2 2 0 0 1 2 -2"
+                  ></path></svg
+                >
+              </div>
+              <div>
+                <h4 class="font-semibold text-foreground">Phone</h4>
+                <p class="text-muted-foreground">+1 (809) 353-9262</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="card-ocean p-6 rounded-2xl shadow">
+            <div class="flex items-center space-x-4">
+              <div
+                class="w-12 h-12 bg-gradient-ocean rounded-full flex items-center justify-center"
+              >
+                <!-- Mail -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-mail"
+                  ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                  ></path><path
+                    d="M3 7a2 2 0 0 1 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -2 2h-14a2 2 0 0 1 -2 -2v-10z"
+                  ></path><path d="M3 7l9 6l9 -6"></path></svg
+                >
+              </div>
+              <div>
+                <h4 class="font-semibold text-foreground">Email</h4>
+                <a
+                  href="mailto:mannytoursrd@gmail.com"
+                  class="text-muted-foreground">mannytoursrd@gmail.com</a
+                >
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Media -->
+          <div class="card-ocean p-6 rounded-2xl shadow">
+            <h4 class="font-semibold text-foreground mb-4">Social Media</h4>
+            <div class="flex space-x-4">
+              <a
+                href="https://web.facebook.com/mannytours"
+                target="_blank"
+                aria-label="Facebook"
+                class="w-10 h-10 bg-gradient-ocean rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+              >
+                <!-- Facebook -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-facebook"
+                  ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                  ></path><path
+                    d="M7 10v4h3v7h4v-7h3l1 -4h-4v-2a1 1 0 0 1 1 -1h3v-4h-3a5 5 0 0 0 -5 5v2h-3"
+                  ></path></svg
+                >
+              </a>
+              <a
+                href="https://www.instagram.com/mannytoursrd/"
+                target="_blank"
+                aria-label="Instagram"
+                class="w-10 h-10 bg-accent rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+              >
+                <!-- Instagram -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-instagram"
+                  ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                  ></path><path
+                    d="M4 8a4 4 0 0 1 4 -4h8a4 4 0 0 1 4 4v8a4 4 0 0 1 -4 4h-8a4 4 0 0 1 -4 -4z"
+                  ></path><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"
+                  ></path><path d="M16.5 7.5v.01"></path></svg
+                >
+              </a>
+              <a
+                href="https://wa.me/18093539262?text=Hello%2C%20I%20would%20like%20to%20get%20more%20information%20about%20tourism%20services%20in%20the%20Dominican%20Republic."
+                target="_blank"
+                aria-label="WhatsApp"
+                class="w-10 h-10 bg-primary rounded-full flex items-center justify-center hover:scale-110 transition-transform"
+              >
+                <!-- Whatsapp -->
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="white"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  class="icon icon-tabler icons-tabler-outline icon-tabler-brand-whatsapp"
+                  ><path stroke="none" d="M0 0h24v24H0z" fill="none"
+                  ></path><path d="M3 21l1.65 -3.8a9 9 0 1 1 3.4 2.9l-5.05 .9"
+                  ></path><path
+                    d="M9 10a.5 .5 0 0 0 1 0v-1a.5 .5 0 0 0 -1 0v1a5 5 0 0 0 5 5h1a.5 .5 0 0 0 0 -1h-1a.5 .5 0 0 0 0 1"
+                  ></path></svg
+                >
+              </a>
+            </div>
+          </div>
+
+          <div class="card-ocean p-6 rounded-2xl shadow">
+            <h4 class="font-semibold text-foreground mb-4">Visit Us</h4>
+
+            <div
+              class="relative w-full aspect-video rounded-xl border border-border overflow-hidden shadow-sm"
+            >
+              <iframe
+                title="Manny Tours location on Google Maps"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3784.297634238529!2d-69.8844376!3d18.470172700000003!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8eaf89d57f67a6e9%3A0x484e6a631042a890!2sManny%20Tours!5e0!3m2!1ses!2sdo!4v1755027748588!5m2!1ses!2sdo"
+                class="absolute inset-0 w-full h-full"
+                style="border:0"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              >
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/src/scripts/contact.js"></script>
+</section>

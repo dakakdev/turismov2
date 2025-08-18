@@ -1,22 +1,128 @@
+---
+import "../styles/global.css";
+import "../styles/app.css";
+---
+
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro Basics</title>
-	</head>
-	<body>
-		<slot />
-	</body>
-</html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+    <!-- Favicon -->
+
+    <link
+      rel="icon"
+      type="image/png"
+      href="/icons/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg" />
+    <link rel="shortcut icon" href="/icons/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/icons/apple-touch-icon.png"
+    />
+    <link rel="manifest" href="/icons/site.webmanifest" />
+
+    <!-- Generator -->
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- =================== Primary SEO =================== -->
+    <title>Dominican Republic Tours, Travel & Rentals | Manny Tours RD</title>
+    <meta
+      name="description"
+      content="Book tours, trips, and rentals in the Dominican Republic. Explore beaches, culture, and adventures with Manny Tours RD."
+    />
+    <!-- (Keywords tienen poco peso en Google, pero ayudan en otros buscadores) -->
+    <meta
+      name="keywords"
+      content="Dominican Republic tours, Dominican Republic travel, Punta Cana excursions, Saona Island tours, Santo Domingo excursions, Dominican Republic car rentals, Dominican Republic vacation packages, Caribbean adventures, tours in Dominican Republic"
+    />
+    <meta name="author" content="Manny Tours RD" />
+    <meta http-equiv="Content-Language" content="en" />
+    <meta
+      name="robots"
+      content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+    />
+    <link rel="canonical" href="https://www.mannytoursrd.com/" />
+
+    <!-- =================== Open Graph =================== -->
+    <meta
+      property="og:title"
+      content="Dominican Republic Tours, Travel & Rentals | Manny Tours RD"
+    />
+    <meta
+      property="og:description"
+      content="Discover the best tours, excursions, and rentals in the Dominican Republic. From paradise beaches to cultural adventures, Manny Tours RD has you covered."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.mannytoursrd.com/" />
+    <meta property="og:site_name" content="Manny Tours RD" />
+    <meta property="og:locale" content="en_US" />
+    <meta
+      property="og:image"
+      content="https://www.mannytoursrd.com/images/2633.jpg"
+    />
+    <meta
+      property="og:image:alt"
+      content="Tourists enjoying Dominican Republic beaches with Manny Tours RD"
+    />
+
+    <!-- =================== Twitter Cards =================== -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Dominican Republic Tours & Rentals | Manny Tours RD"
+    />
+    <meta
+      name="twitter:description"
+      content="Travel the Dominican Republic with tours, rentals, and authentic experiences. Book your Caribbean adventure today."
+    />
+    <meta
+      name="twitter:image"
+      content="https://www.mannytoursrd.com/images/2633.jpg"
+    />
+    <!-- Si tienes usuario de X/Twitter, cámbialo aquí -->
+    <meta name="twitter:site" content="@mannytoursrd" />
+
+    <!-- =================== Geo Tags (búsqueda local) =================== -->
+    <meta name="geo.region" content="DO" />
+    <meta name="geo.placename" content="Santo Domingo, Dominican Republic" />
+    <meta name="geo.position" content="18.4861;-69.9312" />
+    <meta name="ICBM" content="18.4861, -69.9312" />
+
+    <!-- =================== PWA / UX =================== -->
+    <meta name="theme-color" content="#0ea5e9" />
+
+    <!-- =================== JSON-LD Schema.org =================== -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TravelAgency",
+        "name": "Manny Tours RD",
+        "url": "https://www.mannytoursrd.com",
+        "logo": "https://www.mannytoursrd.com/images/Logo_Manny_Tours.webp",
+        "image": "https://www.mannytoursrd.com/images/2633.jpg",
+        "description": "Manny Tours RD offers tours, excursions, and rentals in the Dominican Republic. Explore Punta Cana, Saona Island, Santo Domingo and more.",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Santo Domingo",
+          "addressCountry": "DO"
+        },
+        "telephone": "+1-809-353-9262",
+        "email": "info@mannytoursrd.com",
+        "sameAs": [
+          "https://www.facebook.com/mannytours",
+          "https://www.instagram.com/mannytoursrd/",
+          "https://wa.me/18093539262"
+        ]
+      }
+    </script>
+  </head>
+
+  <body>
+    <slot />
+  </body>
+</html>

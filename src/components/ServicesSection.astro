@@ -1,0 +1,65 @@
+---
+// import transportService from "@/assets/transport-service.jpg";
+
+const services = [
+  {
+    icon: `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg>`,
+    title: "Excursions Across the Dominican Republic",
+    description:
+      "Discover the beauty and diversity of the Dominican Republic with our excursions to the country's most stunning destinations.",
+    features: ["Paradise beaches", "Colonial cities", "Eco-adventures"],
+  },
+  {
+    icon: `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-bus"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M18 17m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M4 17h-2v-11a1 1 0 0 1 1 -1h14a5 7 0 0 1 5 7v5h-2m-4 0h-8" /><path d="M16 5l1.5 7l4.5 0" /><path d="M2 10l15 0" /><path d="M7 5l0 5" /><path d="M12 5l0 5" /></svg>`,
+    title: "Premium Transportation",
+    description:
+      "Travel comfortably and safely in our air-conditioned vehicles.",
+    features: ["Modern Vehicles", "Professional Drivers", "24/7 Service"],
+  },
+  {
+    icon: `<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="white"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-ripple"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7c3 -2 6 -2 9 0s6 2 9 0" /><path d="M3 17c3 -2 6 -2 9 0s6 2 9 0" /><path d="M3 12c3 -2 6 -2 9 0s6 2 9 0" /></svg>`,
+    title: "Vehicle Rentals",
+    description:
+      "Experience the thrill of the Caribbean with our premium vehicle rental services.",
+    features: ["Jet Ski Rentals", "Four-Wheeler Rentals", "Boat Rentals"],
+  },
+];
+---
+
+<section id="Services" class="px-10 py-10 bg-background scroll-mt-20">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 fade-in-up">
+      <h2 class="text-4xl md:text-5xl font-bold mb-6 text-gradient">
+        Our Services
+      </h2>
+      <p class="text-xl text-muted-foreground max-w-3xl mx-auto">
+        We offer a wide range of tourism services designed to make your visit an
+        unforgettable experience
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-8 mb-16">
+      {
+        services.map((service) => (
+          <div class="card-ocean p-8 text-center fade-in-up">
+            <div
+              class="inline-flex items-center justify-center w-16 h-16 bg-gradient-ocean rounded-full mb-6"
+              set:html={service.icon}
+            />
+            <h3 class="text-2xl font-bold mb-4 text-foreground">
+              {service.title}
+            </h3>
+            <p class="text-muted-foreground mb-6 leading-relaxed">
+              {service.description}
+            </p>
+            <ul class="space-y-2">
+              {service.features.map((feature) => (
+                <li class="text-sm text-primary font-medium">✓ {feature}</li>
+              ))}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

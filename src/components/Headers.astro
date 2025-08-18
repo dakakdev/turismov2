@@ -1,0 +1,214 @@
+---
+/* Header.astro con logo en lugar de texto, fondo borroso/transparente fijo; menú móvil mejorado. */
+---
+
+<header
+  id="site-header"
+  class="fixed top-0 inset-x-0 z-50 backdrop-blur bg-[#4FB7E8]/80 border-b border-white/10 shadow-sm"
+>
+  <div class="relative max-w-6xl mx-auto px-6 md:px-10">
+    <div class="h-16 md:h-20 flex items-center justify-between">
+      <!-- Brand (Logo) -->
+      <a href="/" class="flex items-center gap-3 group" aria-label="Home">
+        <img
+          src="/images/Logo_Manny_Tours.webp"
+          alt="Manny Tours RD Logo"
+          class="h-10 w-auto object-contain"
+        />
+      </a>
+
+      <!-- Desktop Nav -->
+      <nav class="hidden md:flex flex-1 justify-center items-center gap-10">
+        <a
+          href="/#Services"
+          data-scroll
+          class="text-white hover:text-foreground transition-colors">Services</a
+        >
+        <a
+          href="/gallery"
+          class="text-white hover:text-foreground transition-colors">Gallery</a
+        >
+        <a
+          href="/#About"
+          data-scroll
+          class="text-white hover:text-foreground transition-colors">About</a
+        >
+        <a
+          href="/#Contact"
+          data-scroll
+          class="text-white hover:text-foreground transition-colors">Contact</a
+        >
+      </nav>
+
+      <!-- CTA (Desktop) -->
+      <div class="hidden md:block">
+        <a
+          href="https://wa.me/18093539262?text=Hello%2C%20I%20would%20like%20to%20get%20more%20information%20about%20tourism%20services%20in%20the%20Dominican%20Republic."
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block cursor-pointer px-5 py-2.5 rounded-full font-semibold text-sm text-white bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600 shadow-lg shadow-sky-500/30 hover:shadow-sky-500/50 hover:scale-[1.03] transition-transform duration-300"
+          aria-label="Chat on WhatsApp">Book Your Adventure</a
+        >
+      </div>
+
+      <!-- Mobile toggle -->
+      <button
+        id="menu-toggle"
+        class="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-xl border border-border bg-background/70 backdrop-blur hover:scale-105 transition"
+        aria-label="Toggle menu"
+        aria-expanded="false"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="22"
+          height="22"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          ><line x1="3" y1="6" x2="21" y2="6"></line><line
+            x1="3"
+            y1="12"
+            x2="21"
+            y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg
+        >
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu (oculto sin ocupar espacio cuando está cerrado) -->
+  <div
+    id="mobile-menu"
+    class="md:hidden transition-all duration-300 will-change-transform"
+    style="display:none; opacity:0; transform: translateY(-8px);"
+  >
+    <div class="card-ocean mx-4 mt-2 rounded-2xl shadow p-4">
+      <nav class="flex flex-col divide-y divide-border/50">
+        <a href="/#Services" data-scroll class="py-3 text-foreground"
+          >Services</a
+        >
+        <a href="/gallery" class="py-3 text-foreground">Gallery</a>
+        <a href="/#About" data-scroll class="py-3 text-foreground">About</a>
+        <a href="/#Contact" data-scroll class="py-3 text-foreground">Contact</a>
+      </nav>
+      <a
+        href="https://wa.me/18093539262?text=Hello%2C%20I%20would%20like%20to%20get%20more%20information%20about%20tourism%20services%20in%20the%20Dominican%20Republic."
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-4 block text-center cursor-pointer px-5 py-2.5 rounded-full font-semibold text-sm text-white bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600 shadow-lg shadow-sky-500/30 hover:shadow-sky-500/50 transition"
+        >WhatsApp</a
+      >
+    </div>
+  </div>
+</header>
+
+<!-- Script: Menú móvil -->
+<script is:inline>
+  (function () {
+    const menuToggle = document.getElementById("menu-toggle");
+    const mobileMenu = document.getElementById("mobile-menu");
+    let isMenuOpen = false;
+
+    function openMenu() {
+      isMenuOpen = true;
+      menuToggle?.setAttribute("aria-expanded", "true");
+      mobileMenu.style.display = "block";
+      mobileMenu.offsetHeight; // force reflow
+      mobileMenu.style.pointerEvents = "auto";
+      mobileMenu.style.opacity = "1";
+      mobileMenu.style.transform = "translateY(0)";
+    }
+
+    function closeMenu() {
+      isMenuOpen = false;
+      menuToggle?.setAttribute("aria-expanded", "false");
+      mobileMenu.style.pointerEvents = "none";
+      mobileMenu.style.opacity = "0";
+      mobileMenu.style.transform = "translateY(-8px)";
+      const handler = () => {
+        if (!isMenuOpen) mobileMenu.style.display = "none";
+        mobileMenu.removeEventListener("transitionend", handler);
+      };
+      mobileMenu.addEventListener("transitionend", handler);
+    }
+
+    function toggleMenu(force) {
+      const next = typeof force === "boolean" ? force : !isMenuOpen;
+      next ? openMenu() : closeMenu();
+    }
+
+    mobileMenu?.addEventListener("click", (e) => {
+      const el = e.target;
+      if (el.tagName === "A") closeMenu();
+    });
+
+    menuToggle?.addEventListener("click", () => toggleMenu());
+
+    window.addEventListener("resize", () => {
+      if (window.innerWidth >= 768) closeMenu();
+    });
+  })();
+</script>
+
+<!-- Script: Scroll suave sin mostrar # (funciona en home y desde otras páginas) -->
+<script is:inline>
+  (function () {
+    const HOME_PATH = "/"; // Ajusta si tu home no es "/"
+    const STORAGE_KEY = "scroll_target_id";
+
+    function isHome() {
+      return location.pathname === HOME_PATH;
+    }
+
+    function getIdFromHref(href) {
+      // Soporta "#Id" o "/#Id"
+      const i = href.indexOf("#");
+      return i >= 0 ? href.slice(i + 1) : "";
+    }
+
+    function smoothScrollTo(id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+
+    // 1) Interceptar clicks de enlaces con data-scroll
+    document.querySelectorAll("a[data-scroll]").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const href = link.getAttribute("href") || "";
+        const id = getIdFromHref(href);
+        if (!id) return; // no sección, salir
+
+        // Si estamos en home, evitar hash y hacer scroll
+        if (isHome()) {
+          e.preventDefault();
+          smoothScrollTo(id);
+          // Asegurar URL limpia (por si acaso)
+          history.replaceState(null, "", HOME_PATH);
+          return;
+        }
+
+        // Si NO estamos en home: guardar destino y navegar al home
+        e.preventDefault();
+        sessionStorage.setItem(STORAGE_KEY, id);
+        window.location.href = HOME_PATH;
+      });
+    });
+
+    // 2) Al cargar home, si hay un destino pendiente, hacer scroll y limpiar
+    window.addEventListener("DOMContentLoaded", () => {
+      if (!isHome()) return;
+      const pending = sessionStorage.getItem(STORAGE_KEY);
+      if (pending) {
+        sessionStorage.removeItem(STORAGE_KEY);
+        // Esperar un tick para asegurar layout listo
+        requestAnimationFrame(() => {
+          smoothScrollTo(pending);
+          history.replaceState(null, "", HOME_PATH);
+        });
+      }
+    });
+  })();
+</script>
