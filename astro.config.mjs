@@ -1,11 +1,11 @@
 import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
-import vercel from "@astrojs/vercel/static";
+import vercel from "@astrojs/vercel/static"; // 👈 static en lugar de serverless
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
   site: "https://mannytoursrd.com/",
-  output: "static", // 👈 importante
+  output: "static", // 👈 ahora static
   adapter: vercel(),
   integrations: [
     sitemap({
