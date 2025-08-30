@@ -3,16 +3,12 @@ import Layout from "../layouts/Layout.astro";
 import { supabase } from "../lib/supabase";
 import Headers from "../components/Headers.astro";
 
-const PAGE_SIZE = 12;
-const pageParam = Number(Astro.url.searchParams.get("page") ?? 1);
-
 // Obtener lista de archivos del bucket 'gallery'
 const { data: files, error } = await supabase.storage.from("gallery").list("", {
   limit: 1000,
-  sortBy: { column: "created_at", order: "desc" },
+  sortBy: { column: "updated_at", order: "desc" },
 });
 
-// Filtrar imágenes y videos, crear URLs públicas
 const imageExtensions = ["jpg", "jpeg", "png", "gif", "webp", "svg"];
 const videoExtensions = ["mp4", "webm", "mov", "avi", "mkv", "ogg"];
 
@@ -32,22 +28,16 @@ const media = (files || [])
       id: file.name,
       src: data.publicUrl,
       title: file.name.replace(/\.[^/.]+$/, "").replace(/[-_]/g, " "),
-      description: `${isVideo ? "Video" : "Image"} uploaded on ${new Date(file.created_at).toLocaleDateString()}`,
-      created_at: file.created_at,
+      description: `${isVideo ? "Video" : "Image"} uploaded on ${
+        file.updated_at
+          ? new Date(file.updated_at).toLocaleDateString()
+          : "Unknown date"
+      }`,
+      updated_at: file.updated_at,
       type: isVideo ? "video" : "image",
       extension: ext,
     };
   });
-
-// Paginación
-const total = media.length;
-const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
-const from = (pageParam - 1) * PAGE_SIZE;
-const to = from + PAGE_SIZE;
-const paginatedMedia = media.slice(from, to);
-
-const hasNext = pageParam < totalPages;
-const hasPrev = pageParam > 1;
 ---
 
 <Layout>
@@ -74,7 +64,7 @@ const hasPrev = pageParam > 1;
       }
 
       {
-        (!paginatedMedia || paginatedMedia.length === 0) && !error && (
+        (!media || media.length === 0) && !error && (
           <div class="card-ocean p-8 rounded-2xl text-center">
             <p class="text-lg">No media yet.</p>
             <p class="text-sm opacity-80 mt-1">
@@ -86,12 +76,12 @@ const hasPrev = pageParam > 1;
       }
 
       {
-        paginatedMedia && paginatedMedia.length > 0 && (
+        media && media.length > 0 && (
           <div
             id="gallery-grid"
             class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 mb-10"
           >
-            {paginatedMedia.map((item, i) => (
+            {media.map((item, i) => (
               <div
                 class="gallery-item group relative overflow-hidden rounded-xl sm:rounded-2xl shadow card-ocean cursor-pointer focus:outline-none focus:ring-2 focus:ring-sky-500 aspect-square"
                 data-index={i}
@@ -132,54 +122,8 @@ const hasPrev = pageParam > 1;
                     class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                   />
                 )}
-                {/* Sección del título comentada para ocultar nombres
-                <div class="absolute inset-x-0 bottom-0 p-2 sm:p-3 bg-gradient-to-t from-black/70 via-black/20 to-transparent text-white">
-                  <div class="text-xs sm:text-sm font-semibold line-clamp-1 drop-shadow-sm">
-                    {item.type === "video" && (
-                      <span class="inline-block mr-1">🎥</span>
-                    )}
-                    {item.title}
-                  </div>
-                </div>
-                */}
               </div>
             ))}
-          </div>
-        )
-      }
-
-      {
-        totalPages > 1 && (
-          <div class="flex items-center justify-center gap-3 mb-16">
-            {hasPrev ? (
-              <a
-                href={`?${new URLSearchParams({ page: String(pageParam - 1) }).toString()}`}
-                class="px-4 py-2 rounded-xl border bg-white/70 hover:bg-white transition"
-              >
-                Previous
-              </a>
-            ) : (
-              <span class="px-4 py-2 rounded-xl border opacity-40 select-none">
-                Previous
-              </span>
-            )}
-
-            <span class="px-4 py-2 rounded-xl card-ocean">
-              {pageParam} / {totalPages}
-            </span>
-
-            {hasNext ? (
-              <a
-                href={`?${new URLSearchParams({ page: String(pageParam + 1) }).toString()}`}
-                class="px-4 py-2 rounded-xl border bg-white/70 hover:bg-white transition"
-              >
-                Next
-              </a>
-            ) : (
-              <span class="px-4 py-2 rounded-xl border opacity-40 select-none">
-                Next
-              </span>
-            )}
           </div>
         )
       }
@@ -188,7 +132,7 @@ const hasPrev = pageParam > 1;
     <!-- Modal Lightbox -->
     <div
       id="lightbox"
-      class="fixed inset-0 z-[9999] bg-black/60 bg-opacity-80 hidden items-center justify-center p-2 sm:p-4"
+      class="fixed inset-0 z-[9999] bg-black/80 hidden items-center justify-center p-2 sm:p-4"
     >
       <div class="relative w-full max-w-6xl max-h-[95vh] flex flex-col">
         <!-- Header bar -->
@@ -203,7 +147,7 @@ const hasPrev = pageParam > 1;
           <!-- Close button -->
           <button
             id="close-btn"
-            class="w-10 h-10 sm:w-12 sm:h-12 bg-black/60 text-white rounded-full flex items-center justify-center hover:bg-black/80 transition-colors text-xl sm:text-2xl cursor-pointer"
+            class="w-10 h-10 sm:w-12 sm:h-12 bg-black/60 text-white rounded-full flex items-center justify-center hover:bg-black/80 transition-colors text-xl sm:text-2xl"
             aria-label="Close"
           >
             <svg
@@ -244,7 +188,7 @@ const hasPrev = pageParam > 1;
           <!-- Navigation buttons -->
           <button
             id="prev-btn"
-            class="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600 text-white rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-transform shadow-lg z-20 text-lg sm:text-xl cursor-pointer"
+            class="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600 text-white rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-transform shadow-lg z-20 text-lg sm:text-xl"
             aria-label="Previous"
           >
             <svg
@@ -266,7 +210,7 @@ const hasPrev = pageParam > 1;
 
           <button
             id="next-btn"
-            class="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600 text-white rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-transform shadow-lg z-20 text-lg sm:text-xl cursor-pointer"
+            class="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-cyan-400 via-sky-500 to-blue-600 text-white rounded-full flex items-center justify-center hover:scale-105 active:scale-95 transition-transform shadow-lg z-20 text-lg sm:text-xl"
             aria-label="Next"
           >
             <svg
@@ -304,112 +248,121 @@ const hasPrev = pageParam > 1;
     </div>
   </section>
 
-  <!-- JavaScript -->
+  <!-- JavaScript con TypeScript -->
   <script>
-    // Esperar a que el DOM esté listo
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener("DOMContentLoaded", function (): void {
       console.log("Gallery script loaded");
 
       // Elementos del DOM
-      const galleryGrid = document.getElementById("gallery-grid");
-      const lightbox = document.getElementById("lightbox");
-      const lightboxImg = document.getElementById("lightbox-img");
-      const lightboxVideo = document.getElementById("lightbox-video");
-      const lightboxTitle = document.getElementById("lightbox-title");
-      const lightboxDesc = document.getElementById("lightbox-desc");
-      const counter = document.getElementById("counter");
-      const closeBtn = document.getElementById("close-btn");
-      const prevBtn = document.getElementById("prev-btn");
-      const nextBtn = document.getElementById("next-btn");
+      const galleryGrid: HTMLElement | null = document.getElementById("gallery-grid");
+      const lightbox: HTMLElement | null = document.getElementById("lightbox");
+      const lightboxImg: HTMLImageElement | null = document.getElementById("lightbox-img") as HTMLImageElement;
+      const lightboxVideo: HTMLVideoElement | null = document.getElementById("lightbox-video") as HTMLVideoElement;
+      const lightboxTitle: HTMLElement | null = document.getElementById("lightbox-title");
+      const lightboxDesc: HTMLElement | null = document.getElementById("lightbox-desc");
+      const counter: HTMLElement | null = document.getElementById("counter");
+      const closeBtn: HTMLButtonElement | null = document.getElementById("close-btn") as HTMLButtonElement;
+      const prevBtn: HTMLButtonElement | null = document.getElementById("prev-btn") as HTMLButtonElement;
+      const nextBtn: HTMLButtonElement | null = document.getElementById("next-btn") as HTMLButtonElement;
 
       // Obtener todos los elementos de la galería
-      const galleryItems = document.querySelectorAll(".gallery-item");
-      let currentIndex = 0;
+      const galleryItems: NodeListOf<HTMLElement> = document.querySelectorAll(".gallery-item");
+      let currentIndex: number = 0;
 
       console.log("Found gallery items:", galleryItems.length);
 
       // Función para abrir el lightbox
-      function openLightbox(index) {
+      function openLightbox(index: number): void {
         console.log("Opening lightbox for index:", index);
         currentIndex = index;
-        const item = galleryItems[currentIndex];
+        const item: HTMLElement = galleryItems[currentIndex];
 
         if (!item) return;
 
-        const src = item.getAttribute("data-src");
-        const title = item.getAttribute("data-title");
-        const description = item.getAttribute("data-description");
-        const type = item.getAttribute("data-type");
+        const src: string | null = item.getAttribute("data-src");
+        const title: string | null = item.getAttribute("data-title");
+        const description: string | null = item.getAttribute("data-description");
+        const type: string | null = item.getAttribute("data-type");
 
         // Actualizar contenido
-        lightboxTitle.textContent = title || "Untitled";
-        lightboxDesc.textContent = description || "";
-        counter.textContent = `${currentIndex + 1} / ${galleryItems.length}`;
+        if (lightboxTitle) lightboxTitle.textContent = title || "Untitled";
+        if (lightboxDesc) lightboxDesc.textContent = description || "";
+        if (counter) counter.textContent = `${currentIndex + 1} / ${galleryItems.length}`;
 
         // Mostrar imagen o video según el tipo
         if (type === "video") {
-          lightboxImg.classList.add("hidden");
-          lightboxVideo.classList.remove("hidden");
-          lightboxVideo.src = src;
-          lightboxVideo.load();
+          if (lightboxImg) lightboxImg.classList.add("hidden");
+          if (lightboxVideo) {
+            lightboxVideo.classList.remove("hidden");
+            lightboxVideo.src = src || "";
+            lightboxVideo.load();
+          }
         } else {
-          lightboxVideo.classList.add("hidden");
-          lightboxImg.classList.remove("hidden");
-          lightboxImg.src = src;
-          lightboxImg.alt = title || "Image";
+          if (lightboxVideo) lightboxVideo.classList.add("hidden");
+          if (lightboxImg) {
+            lightboxImg.classList.remove("hidden");
+            lightboxImg.src = src || "";
+            lightboxImg.alt = title || "Image";
+          }
         }
 
         // Mostrar lightbox
-        lightbox.classList.remove("hidden");
-        lightbox.classList.add("flex");
+        if (lightbox) {
+          lightbox.classList.remove("hidden");
+          lightbox.classList.add("flex");
+        }
         document.body.style.overflow = "hidden";
       }
 
       // Función para cerrar el lightbox
-      function closeLightbox() {
+      function closeLightbox(): void {
         console.log("Closing lightbox");
-        lightbox.classList.add("hidden");
-        lightbox.classList.remove("flex");
+        if (lightbox) {
+          lightbox.classList.add("hidden");
+          lightbox.classList.remove("flex");
+        }
         document.body.style.overflow = "";
 
         // Pausar video si está reproduciéndose
-        if (!lightboxVideo.paused) {
+        if (lightboxVideo && !lightboxVideo.paused) {
           lightboxVideo.pause();
         }
       }
 
       // Función para ir a la imagen anterior
-      function goToPrevious() {
+      function goToPrevious(): void {
         // Detener completamente el video actual
-        lightboxVideo.pause();
-        lightboxVideo.currentTime = 0;
+        if (lightboxVideo) {
+          lightboxVideo.pause();
+          lightboxVideo.currentTime = 0;
+        }
 
-        const newIndex =
-          currentIndex === 0 ? galleryItems.length - 1 : currentIndex - 1;
+        const newIndex: number = currentIndex === 0 ? galleryItems.length - 1 : currentIndex - 1;
         openLightbox(newIndex);
       }
 
       // Función para ir a la siguiente imagen
-      function goToNext() {
+      function goToNext(): void {
         // Detener completamente el video actual
-        lightboxVideo.pause();
-        lightboxVideo.currentTime = 0;
+        if (lightboxVideo) {
+          lightboxVideo.pause();
+          lightboxVideo.currentTime = 0;
+        }
 
-        const newIndex =
-          currentIndex === galleryItems.length - 1 ? 0 : currentIndex + 1;
+        const newIndex: number = currentIndex === galleryItems.length - 1 ? 0 : currentIndex + 1;
         openLightbox(newIndex);
       }
 
       // Event listeners para los elementos de la galería
-      galleryItems.forEach((item, index) => {
-        item.addEventListener("click", function (e) {
+      galleryItems.forEach((item: HTMLElement, index: number): void => {
+        item.addEventListener("click", function (e: Event): void {
           e.preventDefault();
           console.log("Gallery item clicked:", index);
           openLightbox(index);
         });
 
         // Soporte para teclado
-        item.addEventListener("keydown", function (e) {
+        item.addEventListener("keydown", function (e: KeyboardEvent): void {
           if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             openLightbox(index);
@@ -431,8 +384,8 @@ const hasPrev = pageParam > 1;
       }
 
       // Event listeners para el teclado
-      document.addEventListener("keydown", function (e) {
-        if (lightbox.classList.contains("hidden")) return;
+      document.addEventListener("keydown", function (e: KeyboardEvent): void {
+        if (!lightbox || lightbox.classList.contains("hidden")) return;
 
         switch (e.key) {
           case "Escape":
@@ -445,7 +398,7 @@ const hasPrev = pageParam > 1;
             goToNext();
             break;
           case " ":
-            if (!lightboxVideo.classList.contains("hidden")) {
+            if (lightboxVideo && !lightboxVideo.classList.contains("hidden")) {
               e.preventDefault();
               if (lightboxVideo.paused) {
                 lightboxVideo.play();
@@ -458,11 +411,13 @@ const hasPrev = pageParam > 1;
       });
 
       // Cerrar al hacer clic fuera del contenido
-      lightbox.addEventListener("click", function (e) {
-        if (e.target === lightbox) {
-          closeLightbox();
-        }
-      });
+      if (lightbox) {
+        lightbox.addEventListener("click", function (e: Event): void {
+          if (e.target === lightbox) {
+            closeLightbox();
+          }
+        });
+      }
 
       console.log("Gallery initialized successfully");
     });
